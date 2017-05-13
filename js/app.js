@@ -86,10 +86,10 @@ function refrescarPrincipal() {
 	var numTareas = 0;
 	var i = 0;
 	console.log('refrescarPrincipal()');
-	$('#pgPrincipal .listatarea').empty();
+	$('#pgPrincipal .lista-tarea').empty();
 	while (numTareas < 5 && i < tareasDB.length) {
 		if (tareasDB[i].estado == 'pendiente') {
-			$('#pgPrincipal .listatarea').append(
+			$('#pgPrincipal .lista-tarea').append(
 					'<li ' + 'onclick="navSaltar(\'pgEditarTarea\','
 							+ tareasDB[i].id + ')">Tarea: '
 							+ tareasDB[i].titulo + '</li>');
@@ -112,7 +112,7 @@ function refrescarEditarTarea(id) {
 	if (!tarea) {
 		alert('error, tarea con id ' + id + ' no existe');
 		return;
-	}
+	}	
 	// detalles tarea
 	var html = '<legend>Tarea: ' + tarea.titulo + '</legend>';
 	var date = new Date(tarea.ts);
@@ -125,7 +125,7 @@ function refrescarEditarTarea(id) {
 			+ '">'
 			+ [ date.getDate(), date.getMonth() + 1, date.getFullYear() ]
 					.join("/") + '</p>';
-	$('#pgEditarTarea.content fieldset').html(html);
+	$('#pgEditarTarea .content fieldset').html(html);
 	// botón completar
 	html = tarea.estado == 'pendiente' ? '<a id="btCompletar"'
 			+ 'onclick="completarTarea(' + id + '); navAtras();" class="boton"'
@@ -133,12 +133,12 @@ function refrescarEditarTarea(id) {
 	// botón eliminar
 	html += '<a id="btEliminar" onclick="eliminarTarea(' + id
 			+ '); navAtras();"' + ' class="boton" href="#">Eliminar</a>'
-	$('#pgEditarTarea.footer').html(html);
+	$('#pgEditarTarea .footer').html(html);
 }
 
 function refrescarTodasTareas() {
 	console.log('refrescarTodasTareas()');
-	$('#pgTodasTareas .listatarea').empty();
+	$('#pgTodasTareas .lista-tarea').empty();
 	// filtrar
 	var pendientes = $('#pgTodasTareas #chkPendientes').is(":checked");
 	var completadas = $('#pgTodasTareas #chkCompletadas').is(":checked");
@@ -159,15 +159,9 @@ function refrescarTodasTareas() {
 			continue;
 		if (fecha && tarea.ts < fecha.getTime())
 			continue;
-		$('#pgTodasTareas .listatarea').append(
+		$('#pgTodasTareas .lista-tarea').append(
 				'<li class="' + tarea.estado
 						+ '" onclick="navSaltar(\'pgEditarTarea\',' + tarea.id
 						+ ')">Tarea: ' + tarea.titulo + '</li>');
 	}
-
-	function guardarTarea(){
-		
-	}
-
-
 }
