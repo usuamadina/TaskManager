@@ -85,7 +85,7 @@ body {
 }
 
 .lista-tarea li.pendiente:hover {
-    border: solid 2px darkred;
+    border: solid 2px darkorange;
 }
 
 .lista-tarea li.completada:hover {
@@ -93,7 +93,7 @@ body {
 }
 
 .lista-tarea li.vencida:hover{
-    border: solid 2px darkorange;
+    border: solid 2px darkred;
 }
 
 a.boton {
@@ -142,8 +142,8 @@ input[type="date"] {
 }
 
 .lista-tarea li.pendiente {
-    background-color: tomato;
-    border: solid 2px tomato;
+    background-color: orange;
+    border: solid 2px orange;
 }
 
 .lista-tarea li.completada {
@@ -152,14 +152,14 @@ input[type="date"] {
 }
 
 .lista-tarea li.vencida{
-    background-color: orange;
-    border: solid 2px orange;
+    background-color: tomato;
+    border: solid 2px tomato;
 }
 
 p.pendiente {
     padding: 10px;
-    background-color: tomato;
-    border: solid 2px tomato;
+    background-color: orange;
+    border: solid 2px orange;
 }
 
 p.completada {
@@ -170,8 +170,8 @@ p.completada {
 
 p.vencida {
     padding: 10px;
-    background-color: orange;
-    border: solid 2px orange;
+    background-color: tomato;
+    border: solid 2px tomato;
 
 }
 
