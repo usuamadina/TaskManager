@@ -152,6 +152,8 @@ function refrescarTodasTareas() {
     // filtrar
     var pendientes = $('#pgTodasTareas #chkPendientes').is(":checked");
     var completadas = $('#pgTodasTareas #chkCompletadas').is(":checked");
+   // var vencidas = $('#pgTodasTareas #chkVencidas').is(":checked");
+
     var fecha = $('#pgTodasTareas #txtFecha').val();
     
     try {
