@@ -18,7 +18,7 @@ function nuevaTarea(title) {
 	return tarea;
 }
 /* busca una tarea en la bd */
-function buscarTarea(id) { ///// TODO MODIFICAR
+function buscarTarea(id) { 
 	console.log('buscarTarea(' + id + ')');
 		if (tareasDB.key(id)!= null){
 			console.log("tarea encontrada" + JSON.parse(tareasDB.getItem(tareasDB.key(id))));
