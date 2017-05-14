@@ -2,23 +2,25 @@ var nextId = 0;
 
 var tareasDB = sessionStorage;
 
-function Tarea(titulo) {
+function Tarea(titulo, vencimiento) {
 	this.id = nextId++;
 	this.titulo = titulo;
 	this.estado = 'pendiente';
 	this.ts = new Date().getTime();
+	this.vencimiento = vencimiento.split("-").reverse().join("/");
 }
 
 /* crea una nueva tarea en la bd */
-function nuevaTarea(title) {
-	console.log('nuevaTarea(' + title + ')');
-	var tarea = new Tarea(title);
+function nuevaTarea(title,vencimiento) {
+	console.log('nuevaTarea(' + title + ')');	
+	var tarea = new Tarea(title,vencimiento);
 	console.log(tarea);
 	tareasDB.setItem(tarea.id, JSON.stringify(tarea));
 	return tarea;
 }
+
 /* busca una tarea en la bd */
-function buscarTarea(id) { ///// TODO MODIFICAR
+function buscarTarea(id) { 
 	console.log('buscarTarea(' + id + ')');
 		if (tareasDB.key(id)!= null){
 			console.log("tarea encontrada" + JSON.parse(tareasDB.getItem(tareasDB.key(id))));
@@ -62,6 +64,13 @@ function getEstado(id){
 	return tarea.estado;
 	return null;
 
+}
+
+function getFechaVencimiento(id){
+	var tarea = buscarTarea(id);
+	if(tarea!=null)
+		return tarea.vencimiento;
+	return null;
 }
 
 function getTs(id){

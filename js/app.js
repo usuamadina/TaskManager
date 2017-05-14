@@ -18,7 +18,7 @@ $(function() {
     // eventos pgNuevaTarea
     $('#pgNuevaTarea #btAceptar').click(function() {
         // guardar tarea
-        nuevaTarea($('#txtTitulo').val());
+        nuevaTarea($('#txtTitulo').val(), $('#fechaVencimiento').val());
         navAtras();
     });
     $('#pgNuevaTarea #btCancelar').click(function() {
@@ -81,23 +81,35 @@ function navAtras() {
     }
 }
 
-function refrescarPrincipal() {
-    var numTareas = 0;
-    var i = 0;
+function refrescarPrincipal() {  
+	var i = 0; 
+    var j = 0;
+    var fecha = new Date();
+    fecha = fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" +fecha.getFullYear();
     console.log('refrescarPrincipal()');
+    console.log('var i' + i);
     $('#pgPrincipal .lista-tarea').empty();
-    while (i < tareasDB.length) {
-        if (getEstado(i) == 'pendiente') {
+    while (i < tareasDB.length){    	
+    	if ((getFechaVencimiento(i)!="") && (fecha > getFechaVencimiento(i))){
+    		console.log("true");
+    		$('#pgPrincipal .lista-tarea').append(
+                '<li class= "vencida" ' + 'onclick="navSaltar(\'pgEditarTarea\',' + getId(i) + ')">Tarea: ' + getTitulo(i) + '</li>');    		
+    	}
+    	i++;
+    }
+    while (j < tareasDB.length) { 		
+           if (getEstado(j) == 'pendiente' && (getFechaVencimiento(j) == "" || fecha < getFechaVencimiento(j) )) {
             $('#pgPrincipal .lista-tarea').append(
-                '<li ' + 'onclick="navSaltar(\'pgEditarTarea\',' + getId(i) + ')">Tarea: ' + getTitulo(i) + '</li>');
+                '<li ' + 'onclick="navSaltar(\'pgEditarTarea\',' + getId(j) + ')">Tarea: ' + getTitulo(j) + '</li>');
         }
-        i++;
+        j++;
     }
 }
 
 function refrescarNuevaTarea() {
     console.log('refrescarNuevaTarea()');
     $('#pgNuevaTarea #txtTitulo').val('');
+    $('#pgNuevaTarea #vencimiento').val('');
 }
 
 function refrescarEditarTarea(id) {
@@ -111,9 +123,20 @@ function refrescarEditarTarea(id) {
     }
     // detalles tarea
     var html = '<legend>Tarea: ' + getTitulo(id) + '</legend>';
-    var date = new Date(getTs(id));
-    html += '<p class="' + getEstado(id) + '">' + getEstado(id) + '</p><p class="' + getEstado(id) + '">' + [date.getDate(), date.getMonth() + 1, date.getFullYear()]
+    var fechaVencimiento = getFechaVencimiento(id);
+    if (fechaVencimiento!= ""){
+    	var date = fechaVencimiento;
+    	 html += '<p class="' + getEstado(id) + '">' + getEstado(id) + '</p><p class="' + getEstado(id) + '">' + fechaVencimiento + '</p>';
+    }
+    else{
+    	var date = new Date(getTs(id));   
+    	 html += '<p class="' + getEstado(id) + '">' + getEstado(id) + '</p><p class="' + getEstado(id) + '">' + [date.getDate(), date.getMonth() + 1, date.getFullYear()]
         .join("/") + '</p>';
+    }
+
+   
+   /* html += '<p class="' + getEstado(id) + '">' + getEstado(id) + '</p><p class="' + getEstado(id) + '">' + [date.getDate(), date.getMonth() + 1, date.getFullYear()]
+        .join("/") + '</p>';*/
     $('#pgEditarTarea .content fieldset').html(html);
     // botón completar	
 
@@ -130,7 +153,7 @@ function refrescarTodasTareas() {
     var pendientes = $('#pgTodasTareas #chkPendientes').is(":checked");
     var completadas = $('#pgTodasTareas #chkCompletadas').is(":checked");
     var fecha = $('#pgTodasTareas #txtFecha').val();
-    console.log("Fecha que cojo del val" + fecha);
+    
     try {
         fecha = fecha && fecha.split('/');
         fecha = new Date(fecha[2], fecha[1] - 1, fecha[0]);
@@ -139,6 +162,16 @@ function refrescarTodasTareas() {
     }
     console.log('pendientes:' + pendientes + ',completadas:' + completadas + ',fecha:' + fecha);
     for (var i = 0; i < tareasDB.length; i++) {
+    	 var fechaActual = new Date();
+    	fechaActual = fechaActual.getDate() + "/" + (fechaActual.getMonth() +1) + "/" +fechaActual.getFullYear();
+    	var fechaVencimiento = getFechaVencimiento(i);
+    	if(fechaVencimiento!="" && (fechaActual>fechaVencimiento)){
+    		console.log("fecha actual="+fechaActual + " fecha Vencimiento:"+fechaVencimiento + " resultado de comparación fechaActual>fechavencimiento= " + fechaActual>fechaVencimiento);
+    		setEstado(i,"vencida");
+    		 $('#pgTodasTareas .lista-tarea').append(
+            '<li class="' + getEstado(i) + '" onclick="navSaltar(\'pgEditarTarea\',' + getId(i) + ')">Tarea: ' + getTitulo(i) + '</li>');
+    		 continue;
+    	}
 
         if (getEstado(i) == 'pendiente' && !pendientes)
             continue;
